@@ -1,0 +1,2 @@
+# gom
+go hot load
