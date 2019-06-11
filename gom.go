@@ -1,10 +1,19 @@
-package gom
+package main
 
 import (
 	"log"
 
 	"github.com/fsnotify/fsnotify"
 )
+
+type Gom struct {
+	commands map[string]*Command
+}
+
+// Load All Commands
+func loadCommands() {
+
+}
 
 func main() {
 	watcher, err := fsnotify.NewWatcher()
