@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"os"
 
 	"github.com/5046312/gom/command"
 	_ "github.com/5046312/gom/command/build"
@@ -10,10 +12,12 @@ import (
 )
 
 type Gom struct {
-	cmd map[string]*command.Command
+	cmd  map[string]*command.Command
+	flag flag.FlagSet
 }
 
 var G *Gom
+var cmd string
 
 func init() {
 	G = &Gom{}
@@ -21,6 +25,15 @@ func init() {
 }
 
 func main() {
-	fmt.Println(helper.Icon)
-	fmt.Println(len(G.cmd))
+	helper.Icon()
+	flag.Usage = helper.Usage
+	flag.Parse()
+	args := flag.Args()
+	fmt.Println(args)
+
+	if len(args) < 1 {
+		flag.Usage()
+		os.Exit(2)
+		return
+	}
 }
