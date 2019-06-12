@@ -13,12 +13,14 @@ var (
 func init() {
 	cmd := &command.Command{}
 	cmd.Name = "run"
+	cmd.Usage = "run main.go"
+	cmd.Exec = exec
 	// Flag
-	cmd.Flag.Usage = usage
 	cmd.Flag.StringVar(&mainFile, "main", "main.go", "Need Project Main File")
 	command.List[cmd.Name] = cmd
 }
 
-func usage() {
-	fmt.Println("run usage")
+// exec
+func exec(args []string) {
+	fmt.Println("help usage")
 }

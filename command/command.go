@@ -2,7 +2,6 @@ package command
 
 import (
 	"flag"
-	"fmt"
 )
 
 type Command struct {
@@ -10,10 +9,7 @@ type Command struct {
 	Usage   string
 	Options map[string]string
 	Flag    flag.FlagSet
-}
-
-func (cmd *Command) Exec(args []string) {
-	fmt.Println("Exec " + cmd.Name + " Command")
+	Exec    func(args []string)
 }
 
 var List = make(map[string]*Command)

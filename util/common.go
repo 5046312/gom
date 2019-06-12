@@ -1,4 +1,4 @@
-package helper
+package util
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ func Icon() {
 
 func Usage(args ...string) {
 	if len(args) == 0 {
-		fmt.Println("0 All Usage")
+		fmt.Println("0 Should Show All Usage")
 	} else if len(args) != 1 {
 		fmt.Println("!=1 All Usage")
 	} else {
