@@ -5,8 +5,8 @@ import (
 )
 
 func init() {
-	command := &command.Command{
+	cmd := &command.Command{
 		Name: "run",
 	}
-	append(command.Commands, command)
+	command.Commands = append(command.Commands, cmd)
 }
