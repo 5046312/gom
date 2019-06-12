@@ -8,5 +8,5 @@ func init() {
 	cmd := &command.Command{
 		Name: "run",
 	}
-	command.Commands = append(command.Commands, cmd)
+	command.List[cmd.Name] = cmd
 }
