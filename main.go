@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/5046312/gom/command"
 	_ "github.com/5046312/gom/command/build"
@@ -26,12 +25,11 @@ func init() {
 
 func main() {
 	util.Icon()
-	flag.Usage = func() { util.Usage() }
 	flag.Parse()
 	args := flag.Args()
 
 	if len(args) < 1 {
-		fmt.Println(command.List["help"].Usage)
+		command.List["help"].Usage()
 		return
 	}
 
@@ -41,6 +39,6 @@ func main() {
 		cmd.Exec(cmd.Flag.Args())
 	} else {
 		// Command Not Exist
-		fmt.Println(command.List["help"].Usage)
+		command.List["help"].Usage()
 	}
 }
