@@ -18,11 +18,11 @@ func init() {
 }
 
 func Usage() {
-	fmt.Println("help usage")
+	fmt.Println(cmd.Name, "Usage: ")
 }
 
 func Exec(args []string) {
-	fmt.Println("help usage")
+	fmt.Println(cmd.Name, ": ", args)
 }
 
 func PlatWin() {

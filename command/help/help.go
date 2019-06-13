@@ -18,21 +18,13 @@ func init() {
 }
 
 func Usage() {
-	fmt.Println("help usage")
+	fmt.Println(cmd.Name, "Usage: ")
 }
 
 func Exec(args []string) {
-	fmt.Println("help usage")
-}
-
-func PlatWin() {
-
-}
-
-func PlatLinux() {
-
-}
-
-func PlatMac() {
-
+	if len(args) == 0 {
+		Usage()
+		return
+	}
+	command.List[args[0]].Usage()
 }
