@@ -1,30 +1,38 @@
 package help
 
 import (
-	"github.com/5046312/gom/util"
+	"fmt"
 
 	"github.com/5046312/gom/command"
 )
 
-var (
-	cmd     *command.Command
-	cmdName string
-)
+var cmd *command.Command
 
 func init() {
 	cmd = &command.Command{
 		Name:  "help",
-		Usage: "help run",
-		Exec:  exec,
+		Usage: Usage,
+		Exec:  Exec,
 	}
-	// Flag
-	cmd.Flag.StringVar(&cmdName, "cmd", "help", "Command Help Content")
 	command.List[cmd.Name] = cmd
 }
 
-// exec
-func exec(args []string) {
-	if len(args) < 1 {
-		util.Usage()
-	}
+func Usage() {
+	fmt.Println("help usage")
+}
+
+func Exec(args []string) {
+	fmt.Println("help usage")
+}
+
+func PlatWin() {
+
+}
+
+func PlatLinux() {
+
+}
+
+func PlatMac() {
+
 }

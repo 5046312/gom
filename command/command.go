@@ -5,11 +5,10 @@ import (
 )
 
 type Command struct {
-	Name    string
-	Usage   string
-	Options map[string]string
-	Flag    flag.FlagSet
-	Exec    func(args []string)
+	Name  string
+	Flag  flag.FlagSet
+	Usage func()
+	Exec  func(args []string)
 }
 
 var List = make(map[string]*Command)
