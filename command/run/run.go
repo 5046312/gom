@@ -24,15 +24,3 @@ func Usage() {
 func Exec(args []string) {
 	fmt.Println(cmd.Name, args)
 }
-
-func PlatWin() {
-
-}
-
-func PlatLinux() {
-
-}
-
-func PlatMac() {
-
-}
