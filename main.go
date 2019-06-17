@@ -5,6 +5,7 @@ import (
 
 	"github.com/5046312/gom/command"
 	_ "github.com/5046312/gom/command/build"
+	_ "github.com/5046312/gom/command/file"
 	_ "github.com/5046312/gom/command/help"
 	_ "github.com/5046312/gom/command/run"
 	"github.com/5046312/gom/util"
