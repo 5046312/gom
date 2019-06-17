@@ -2,6 +2,8 @@ package util
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 )
 
 func Icon() {
@@ -15,6 +17,12 @@ func Icon() {
 	 ######    #######  ##     ## 
 `
 	fmt.Println(gom)
+}
+
+func Command(args ...string) error {
+	cmd := exec.Command("go", args...)
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 // func Usage(args ...string) {

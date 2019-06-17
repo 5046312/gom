@@ -2,14 +2,16 @@ package build
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 
 	"github.com/5046312/gom/command"
+	"github.com/5046312/gom/util"
 )
 
 var cmd *command.Command
 
 var (
-	mainFile string = "main.go"
 	platform string = "win"
 )
 
@@ -29,20 +31,18 @@ func Usage() {
 
 func Exec(args []string) {
 	fmt.Println(cmd.Name, ": ", args)
-	if len(args) == 0 {
-		// Default
-
+	mainfile := "main.go"
+	if len(args) != 0 {
+		mainfile = args[0]
 	}
-}
-
-func PlatWin() {
-
-}
-
-func PlatLinux() {
-
-}
-
-func PlatMac() {
-
+	switch platform {
+	case "win", "windows":
+		os.Setenv("GOOS", "windows")
+	case "mac":
+		os.Setenv("GOOS", "darwin")
+	case "linux":
+		os.Setenv("GOOS", "linux")
+	}
+	os.Setenv("GOARCH", runtime.GOARCH)
+	util.Command("build", mainfile)
 }
