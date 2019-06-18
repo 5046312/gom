@@ -28,6 +28,7 @@ func watcher(dir string, file string) {
 				if !ok {
 					return
 				}
+				// TODO CHANEL
 				if restarting {
 					return
 				}
