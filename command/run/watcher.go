@@ -20,7 +20,6 @@ func watcher(dir string, file string) {
 	}
 	defer watcher.Close()
 
-	restarting := make(chan bool)
 	go func() {
 		for {
 			select {
@@ -28,16 +27,9 @@ func watcher(dir string, file string) {
 				if !ok {
 					return
 				}
-				// TODO CHANEL
-				if <-restarting {
-					return
-				}
 				log.Println("Event", event)
-				restarting <- true
 				kill()
 				run(dir, file)
-				restarting <- false
-
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					return
