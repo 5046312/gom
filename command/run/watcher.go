@@ -9,7 +9,6 @@ import (
 	"github.com/fsnotify/fsnotify"
 )
 
-var restarting bool = false
 var (
 	cmd *exec.Cmd
 )
@@ -21,6 +20,8 @@ func watcher(dir string, file string) {
 	}
 	defer watcher.Close()
 
+	restarting := make(chan bool)
+	restarting <- false
 	go func() {
 		for {
 			select {
@@ -29,14 +30,14 @@ func watcher(dir string, file string) {
 					return
 				}
 				// TODO CHANEL
-				if restarting {
+				if <-restarting {
 					return
 				}
 				log.Println("Event", event)
-				restarting = true
+				restarting <- true
 				kill()
 				run(dir, file)
-				restarting = false
+				restarting <- false
 
 			case err, ok := <-watcher.Errors:
 				if !ok {
