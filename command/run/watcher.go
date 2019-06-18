@@ -21,7 +21,6 @@ func watcher(dir string, file string) {
 	defer watcher.Close()
 
 	restarting := make(chan bool)
-	restarting <- false
 	go func() {
 		for {
 			select {
