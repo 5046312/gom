@@ -1,2 +1,2 @@
 # gom
-go hot load
+1234542

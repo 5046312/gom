@@ -2,11 +2,19 @@ package run
 
 import (
 	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
 )
 
-func newWatcher() {
+var restarting bool = false
+var (
+	cmd *exec.Cmd
+)
+
+func watcher(dir string, file string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -20,10 +28,15 @@ func newWatcher() {
 				if !ok {
 					return
 				}
-				log.Println("event:", event)
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Println("modified file:", event.Name)
+				if restarting {
+					return
 				}
+				log.Println(event)
+				restarting = true
+				kill()
+				run(dir, file)
+				restarting = false
+
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					return
@@ -33,11 +46,29 @@ func newWatcher() {
 		}
 	}()
 
-	err = watcher.Add("./")
+	err = watcher.Add(dir)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Start Process
+	run(dir, file)
+
 	done := make(chan bool)
 	<-done
+}
+
+func kill() {
+	// Have Process
+	if cmd != nil && cmd.Process != nil {
+		cmd.Process.Kill()
+	}
+}
+
+// go run ...
+func run(dir string, file string) {
+	path := filepath.Join(dir, file)
+	cmd := exec.Command("go", "run", path)
+	cmd.Stderr = os.Stderr
+	go cmd.Run()
 }
