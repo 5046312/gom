@@ -31,7 +31,7 @@ func watcher(dir string, file string) {
 				if restarting {
 					return
 				}
-				log.Println(event)
+				log.Println("Event", event)
 				restarting = true
 				kill()
 				run(dir, file)
@@ -50,6 +50,7 @@ func watcher(dir string, file string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Watcher:", dir)
 
 	// Start Process
 	run(dir, file)
@@ -70,5 +71,7 @@ func run(dir string, file string) {
 	path := filepath.Join(dir, file)
 	cmd := exec.Command("go", "run", path)
 	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	log.Println("Starting", path)
 	go cmd.Run()
 }
