@@ -18,6 +18,7 @@ var (
 func init() {
 	cmd = &command.Command{
 		Name:  "build",
+		Info:  `Build Go Project To Different Platforms`,
 		Usage: Usage,
 		Exec:  Exec,
 	}

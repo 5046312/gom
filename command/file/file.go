@@ -14,6 +14,7 @@ func init() {
 	cmd = &command.Command{
 		Name:  "file",
 		Usage: Usage,
+		Info:  `Start A File Server`,
 		Exec:  Exec,
 	}
 	command.List[cmd.Name] = cmd

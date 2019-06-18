@@ -7,6 +7,7 @@ import (
 type Command struct {
 	Name  string
 	Flag  flag.FlagSet
+	Info  string
 	Usage func()
 	Exec  func(args []string)
 }

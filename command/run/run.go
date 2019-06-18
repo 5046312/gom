@@ -11,6 +11,7 @@ var cmd *command.Command
 func init() {
 	cmd = &command.Command{
 		Name:  "run",
+		Info:  `Run Go Project, Hot Reload When File Changes`,
 		Usage: Usage,
 		Exec:  Exec,
 	}
