@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
+	"strings"
 
 	"github.com/5046312/gom/util"
 
@@ -12,14 +14,17 @@ import (
 )
 
 var (
-	cmd *exec.Cmd
+	cmd  *exec.Cmd
+	dir  string
+	file string
 )
 
 func watcher(dir string, file string) {
 	path := filepath.Join(dir, file)
 	exist := util.PathExists(path)
 	if !exist {
-		panic("Main File Not Exist:" + path)
+		log.Println("Main File Not Exist:" + path)
+		return
 	}
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -35,43 +40,79 @@ func watcher(dir string, file string) {
 					return
 				}
 				log.Println("Event:", event)
-				kill()
-				run(dir, file)
+				if kill() {
+					run(dir, file)
+				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					return
 				}
-				log.Println("error:", err)
+				log.Println("Watcher Error:", err)
 			}
 		}
 	}()
 
-	err = watcher.Add(dir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Watcher:", dir)
-
 	// Start Process
 	run(dir, file)
+
+	err = watcher.Add(dir)
+	if err != nil {
+		log.Fatal("Watcher error:", err)
+	}
+	log.Println("Watcher:", dir)
 
 	done := make(chan bool)
 	<-done
 }
 
-func kill() {
+func kill() bool {
 	// Have Process
 	if cmd != nil && cmd.Process != nil {
-		cmd.Process.Kill()
+		log.Println("Kill Process:", cmd.Process.Pid)
+		// if runtime.GOOS == "windows" {
+		// 	cmd.Process.Signal(os.Kill)
+		// } else {
+		// 	cmd.Process.Signal(os.Interrupt)
+		// }
+		// cmd.Wait()
+		err := cmd.Process.Kill()
+		if err != nil {
+			log.Printf("Error while killing cmd process: %s", err)
+			return false
+		} else {
+			return true
+		}
 	}
+	return false
 }
 
 // go run ...
 func run(dir string, file string) {
 	path := filepath.Join(dir, file)
-	cmd := exec.Command("go", "run", path)
+	log.Println("Building Project:", path)
+	bcmd := exec.Command("go", "build", path)
+	bcmd.Stderr = os.Stderr
+	bcmd.Stdout = os.Stdout
+	err := bcmd.Run()
+	if err != nil {
+		log.Println("Failed To Build the Project:", err)
+		os.Exit(2)
+		return
+	}
+
+	exeFile := strings.Replace(file, `.go`, ``, -1)
+	if runtime.GOOS == "windows" {
+		exeFile += ".exe"
+	}
+
+	cmd = exec.Command(exeFile)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
-	log.Println("Starting", path)
-	go cmd.Run()
+	log.Println("Start Process:", exeFile)
+	go func() {
+		err := cmd.Run()
+		if err != nil {
+			log.Println("Process Run Error: ", err)
+		}
+	}()
 }
