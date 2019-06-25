@@ -26,6 +26,9 @@ func Usage() {
 
 func Exec(args []string) {
 	// fmt.Println(runCmd.Name, args)
+	if len(args) > 0 {
+		mainfile = args[0]
+	}
 	dir, _ := os.Getwd()
 	watcher(dir, mainfile)
 }

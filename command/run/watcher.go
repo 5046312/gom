@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/5046312/gom/util"
+
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -14,6 +16,11 @@ var (
 )
 
 func watcher(dir string, file string) {
+	path := filepath.Join(dir, file)
+	exist := util.PathExists(path)
+	if !exist {
+		panic("Main File Not Exist:" + path)
+	}
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -24,10 +31,10 @@ func watcher(dir string, file string) {
 		for {
 			select {
 			case event, ok := <-watcher.Events:
-				if !ok {
+				if !ok || cmd.Process == nil {
 					return
 				}
-				log.Println("Event", event)
+				log.Println("Event:", event)
 				kill()
 				run(dir, file)
 			case err, ok := <-watcher.Errors:

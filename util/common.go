@@ -24,18 +24,14 @@ func Command(args ...string) error {
 	return cmd.Run()
 }
 
-// func Usage(args ...string) {
-// 	if len(args) == 0 {
-// 		fmt.Println("0 Should Show All Usage")
-// 	} else if len(args) != 1 {
-// 		fmt.Println("!=1 All Usage")
-// 	} else {
-// 		cmd, exist := command.List[args[0]]
-// 		fmt.Println(args, cmd, exist)
-// 		if exist {
-// 			fmt.Println(cmd.Usage)
-// 		} else {
-// 			fmt.Println("Don't Know")
-// 		}
-// 	}
-// }
+// Path Exist
+func PathExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
